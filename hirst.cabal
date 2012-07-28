@@ -24,7 +24,7 @@ description:         This started out of pure curiosity: I wanted to test how
 homepage:            -
 
 -- The license under which the package is released.
-license:             THE BEER-WARE LICENSE
+license:             MIT
 
 -- The file containing the license text.
 license-file:        LICENSE
