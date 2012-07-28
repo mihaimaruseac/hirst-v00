@@ -17,11 +17,14 @@ data CommandLineArgs
 -- | Build the CollectUsers mode
 collectUsersMode :: CommandLineArgs
 collectUsersMode = CollectUsers
-  { path = defaultPath &= help "Path to log files"
+  { path = defaultPath &= argPos 0
   }
   &= auto
   &= details
-    [ "Examples:"
+    [ "Collect users help:"
+    , "\t" ++ progName ++ " collectUsers [PATH]"
+    , "\tPATH (default " ++ defaultPath ++ "): location of log files"
+    , "Examples:"
     , "\t" ++ progName ++ " collectUsers logs/"
     , "\t" ++ progName ++ " co logs/"
     ]
