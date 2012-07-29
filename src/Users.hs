@@ -4,25 +4,27 @@ module Users where
 
 import Data.ByteString.Char8 as BSC
 import Data.Conduit
-import Data.Conduit.List
+import Data.Conduit.List as DCL
+import Data.Set as S
 import Prelude as P
 import Debug.Trace
 
 import LogReader
 
 data SeenUsers = SU
-  { nicksSeen :: ![String]
-  , nickChanges :: ![(String, String)]
+  { nicksSeen :: Set String
+  , nickChanges :: Set (String, String)
   } deriving (Show)
 
-noSeenUsers = SU [] []
+noSeenUsers = SU S.empty S.empty
 
 collectUsers :: FilePath -> IO ()
 collectUsers logDir = do
   logs <- readLogs logDir
-  results <- runResourceT $ logs $$ fold processLogs noSeenUsers
+  results <- runResourceT $ logs $$ DCL.fold processLogs noSeenUsers
   print results
---  P.mapM_ (P.mapM_  (P.putStrLn . ) results
+  print $ size $ nicksSeen results
+  print $ size $ nickChanges results
 
 processLogs :: SeenUsers -> ByteString -> SeenUsers
 processLogs seen line
@@ -45,12 +47,12 @@ record (n:ws) su@SU{..}
     rest = BSC.unwords ws
 
 recordOneNick :: ByteString -> SeenUsers -> SeenUsers
-recordOneNick n su@SU{..} = su { nicksSeen = BSC.unpack n : nicksSeen }
+recordOneNick n su@SU{..} = su { nicksSeen = BSC.unpack n `insert` nicksSeen }
 
 recordChangeNick :: ByteString -> ByteString -> SeenUsers -> SeenUsers
 recordChangeNick nfrom nto su@SU{..} = su
-  { nicksSeen = nick:nick':nicksSeen
-  , nickChanges = (nick, nick') : nickChanges
+  { nicksSeen = nick `insert` (nick' `insert` nicksSeen)
+  , nickChanges = (nick, nick') `insert` nickChanges
   }
   where
     nick = BSC.unpack nfrom
