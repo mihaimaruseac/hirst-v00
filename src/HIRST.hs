@@ -46,8 +46,10 @@ arguments = cmdArgsMode $ modes [collectUsersMode]
   &= helpArg [explicit, name "help", name "h"]
   &= program progName
 
+mainH :: IO ()
 mainH = do
   args <- cmdArgsRun $ arguments
   optionHandler args
 
+optionHandler :: CommandLineArgs -> IO ()
 optionHandler args@CollectUsers{..} = collectUsers path
