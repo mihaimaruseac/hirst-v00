@@ -18,7 +18,7 @@ synopsis:            A Haskell utility to generate IRC statistics based on logs
 -- A longer description of the package.
 description:         This started out of pure curiosity: I wanted to test how
                      hard it is to generate IRC statistics in Haskell based on
-                     log files in the Libertiny bot format.
+                     log files in the supybot bot format.
 
 -- URL for the project homepage or repository.
 homepage:            -
