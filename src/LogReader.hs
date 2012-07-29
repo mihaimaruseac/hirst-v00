@@ -10,7 +10,7 @@ import Prelude as P
 
 readLogs logDir = do
   files <- P.filter isLogFile <$> getDirectoryContents logDir
-  return $ sourceList (P.take 1 files) $= awaitForever (\f -> getLogCnt $ logDir ++ f)
+  return $ sourceList files $= awaitForever (\f -> getLogCnt $ logDir ++ f)
 
 isLogFile :: FilePath -> Bool
 isLogFile = DL.isSuffixOf ".log"
